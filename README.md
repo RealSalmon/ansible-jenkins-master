@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/RealSalmon/fogbutter.jenkins-master.svg)](https://travis-ci.org/RealSalmon/fogbutter.jenkins-master)
+[![Build Status](https://travis-ci.org/RealSalmon/fogbutter.jenkins-master.svg?branch=master)](https://travis-ci.org/RealSalmon/fogbutter.jenkins-master)
 
 fogbutter.jenkins-master
 ========================

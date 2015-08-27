@@ -17,8 +17,12 @@
   apt: name=jenkins state=present
   tags: [jenkins-master-install]
 
+- include: restore-backup.yml
+  when: jenkins_master_backup_file
+  tags: [jenkins-master-restore]
+
 - name: ensure jenkins service is enabled and running
   become: yes
   become_method: sudo
   service: name=jenkins state=started enabled=true
-  tags: [jenkins-master-install]
+  tags: [jenkins-master-install, jenkins-master-restore]

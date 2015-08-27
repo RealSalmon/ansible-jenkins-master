@@ -2,3 +2,6 @@
 jenkins_master_apt_key_url: https://jenkins-ci.org/debian/jenkins-ci.org.key
 jenkins_master_apt_key_id: D50582E6
 jenkins_master_apt_repo: deb http://pkg.jenkins-ci.org/debian binary/
+jenkins_master_backup_file_copy: no
+jenkins_master_backup_destination: /var/lib
+jenkins_master_backup_file: false

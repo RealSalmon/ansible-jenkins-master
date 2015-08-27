@@ -9,20 +9,20 @@ before_install:
 
 install:
   - sudo pip -q install ansible
-  - (echo "---";echo "- hosts: all"; echo "  roles: [./]") > playbook.yml
+  - "(echo '---';echo '- hosts: all'; echo '  roles: [./]') > playbook.yml"
 
 script:
 
   - >
-    ansible-playbook --connection local -i localhost, playbook.yml
-   | grep -q '.*failed=0'
-   || (echo 'Playbook failed' > /dev/stderr && exit 1)
+      ansible-playbook --connection local -i localhost, playbook.yml
+      | grep -q '.*failed=0'
+      || (echo 'Playbook failed' > /dev/stderr && exit 1)
 
   - >
-    ansible-playbook --connection local -i localhost, playbook.yml
-    | grep -q 'changed=0.*failed=0'
-    || (echo 'Idempotency check failed' > /dev/stderr && exit 1)
+      ansible-playbook --connection local -i localhost, playbook.yml
+      | grep -q 'changed=0.*failed=0'
+      || (echo 'Idempotency check failed' > /dev/stderr && exit 1)
 
   - >
-    sudo /etc/init.d/jenkins status
-    || (echo 'Service status check failed' > /dev/stderr && exit 1)
+      sudo /etc/init.d/jenkins status
+      || (echo 'Service status check failed' > /dev/stderr && exit 1)

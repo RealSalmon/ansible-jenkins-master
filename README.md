@@ -1,5 +1,7 @@
-Role Name
-=========
+[![Build Status](https://travis-ci.org/RealSalmon/fogbutter.jenkins-master.svg)](https://travis-ci.org/RealSalmon/fogbutter.jenkins-master)
+
+fogbutter.jenkins-master
+========================
 A very simple Jenkins install
 
 Requirements

@@ -9,7 +9,6 @@ before_install:
 
 install:
   - sudo pip -q install ansible
-  - "(echo '---';echo '- hosts: all'; echo '  roles: [./]') > playbook.yml"
 
 script:
 

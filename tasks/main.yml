@@ -2,7 +2,7 @@
 - name: add public key for jenkins apt repository
   become: yes
   become_method: sudo
-  apt_key: key={{ jenkins_master_apt_key_url }} state=present id={{ jenkins_master_apt_key_id }}
+  apt_key: url={{ jenkins_master_apt_key_url }} state=present id={{ jenkins_master_apt_key_id }}
   tags: [jenkins-master-install]
 
 - name: add jenkins apt repository

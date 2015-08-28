@@ -7,8 +7,8 @@ from a backup file
 
 Requirements
 ------------
-Ubuntu 14.04
-Ansible 1.9
+- Ubuntu 14.04
+- Ansible 1.9
 
 Role Variables
 --------------

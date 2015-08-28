@@ -5,3 +5,21 @@ jenkins_master_apt_repo: deb http://pkg.jenkins-ci.org/debian binary/
 jenkins_master_backup_file_copy: no
 jenkins_master_backup_destination: /var/lib
 jenkins_master_backup_file: false
+
+# Should nginx be used as a reverse http proxy?
+# jenkins_master_nginx_* settings have no effect if this is false
+jenkins_master_nginx_proxy: false
+
+# The value to use for the nginx server_name
+jenkins_master_nginx_server_name: _
+
+# Enforce SSL based on the X-Forwarded-Proto header
+jenkins_master_nginx_enforce_ssl_xfp: false
+
+# Put access and error logs the nginx proxy server here
+jenkins_master_nginx_log_dir: /var/log/nginx
+
+# Remove the default nginx site?
+# For safety, this defaults to false
+# It's very likey that it should be true
+jenkins_master_nginx_unlink_default: false

@@ -1,0 +1,50 @@
+---
+- name: install nginx
+  become: yes
+  become_method: sudo
+  apt: name=nginx state=present
+  when: jenkins_master_nginx_proxy
+  tags: [jenkins-master-nginx-proxy]
+
+- name: configure nginx proxy
+  become: yes
+  become_method: sudo
+  template: src=nginx.conf dest=/etc/nginx/sites-available/jenkins-master.conf
+  notify:
+    - reload nginx
+  when: jenkins_master_nginx_proxy
+  tags: [jenkins-master-nginx-proxy]
+
+- name: turn on nginx proxy
+  become: yes
+  become_method: sudo
+  file: src=/etc/nginx/sites-available/jenkins-master.conf dest=/etc/nginx/sites-enabled/jenkins-master.conf state=link
+  notify:
+    - reload nginx
+  when: jenkins_master_nginx_proxy
+  tags: [jenkins-master-nginx-proxy]
+
+- name: turn off nginx proxy
+  become: yes
+  become_method: sudo
+  file: path=/etc/nginx/sites-enabled/jenkins-master.conf state=absent
+  notify:
+    - reload nginx
+  when: jenkins_master_nginx_proxy == false
+  tags: [jenkins-master-nginx-proxy]
+
+- name: turn off default site
+  become: yes
+  become_method: sudo
+  file: path=/etc/nginx/sites-enabled/default state=absent
+  notify:
+    - reload nginx
+  when: jenkins_master_nginx_proxy and jenkins_master_nginx_unlink_default
+  tags: [jenkins-master-nginx-proxy]
+
+- name: ensure nginx service is enabled and running
+  become: yes
+  become_method: sudo
+  service: name=nginx state=started enabled=true
+  when: jenkins_master_nginx_proxy
+  tags: [jenkins-master-nginx-proxy]

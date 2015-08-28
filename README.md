@@ -1,9 +1,11 @@
 [![Build Status](https://travis-ci.org/RealSalmon/fogbutter.jenkins-master.svg?branch=master)](https://travis-ci.org/RealSalmon/fogbutter.jenkins-master)
 
-fogbutter.jenkins-master
-========================
+RealSalmon.jenkins-master
+=========================
 A simple Jenkins install with options for using an nginx proxy and restoring
 from a backup file
+
+https://galaxy.ansible.com/list#/roles/4900
 
 Requirements
 ------------

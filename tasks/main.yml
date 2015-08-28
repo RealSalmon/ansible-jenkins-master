@@ -26,3 +26,7 @@
   become_method: sudo
   service: name=jenkins state=started enabled=true
   tags: [jenkins-master-install, jenkins-master-restore]
+
+- include: nginx-proxy.yml
+  when: jenkins_master_nginx_proxy
+  tags: [jenkins-master-install, jenkins-master-nginx-proxy]

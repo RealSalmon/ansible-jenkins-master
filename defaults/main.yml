@@ -16,6 +16,25 @@ jenkins_master_nginx_server_name: _
 # Enforce SSL based on the X-Forwarded-Proto header
 jenkins_master_nginx_enforce_ssl_xfp: false
 
+# Enforce SSL
+jenkins_master_nginx_enforce_ssl: false
+
+# Use SSL
+jenkins_master_nginx_ssl: false
+
+# SSL key and certificate locations
+# This role will not place these files so it is up to some other method to
+# set them up appropriately. e.g. another role, task, download, etc.
+#
+# The exception is that if jenkins_master_nginx_ssl_s3_bucket is set then
+# an attempt will be made to get these files from S3. See the section
+# "SSL files from S3" below for related variables.
+jenkins_master_nginx_ssl_crt: /etc/nginx/ssl/{{ jenkins_master_nginx_server_name }}.crt
+jenkins_master_nginx_ssl_key: /etc/nginx/ssl/{{ jenkins_master_nginx_server_name }}.key
+
+# Value to use for the nginx ssl_protocols directive
+jenkins_master_nginx_ssl_protocols: TLSv1 TLSv1.1 TLSv1.2
+
 # Put access and error logs the nginx proxy server here
 jenkins_master_nginx_log_dir: /var/log/nginx
 
@@ -23,3 +42,11 @@ jenkins_master_nginx_log_dir: /var/log/nginx
 # For safety, this defaults to false
 # It's very likey that it should be true
 jenkins_master_nginx_unlink_default: false
+
+# SSL files from S3
+jenkins_master_nginx_ssl_s3_bucket: false
+jenkins_master_nginx_ssl_s3_crt: "{{ jenkins_master_nginx_ssl_crt }}"
+jenkins_master_nginx_ssl_s3_key: "{{ jenkins_master_nginx_ssl_crt }}"
+jenkins_master_nginx_ssl_s3_access_key:
+jenkins_master_nginx_ssl_s3_secret_key:
+jenkins_master_nginx_ssl_s3_region: us-east-1

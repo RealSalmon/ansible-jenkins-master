@@ -1,0 +1,81 @@
+---
+# this command fails on travis
+- name: install awscli via apt
+  become: true
+  become_method: sudo
+  apt: name=awscli state=present
+  when: jenkins_master_nginx_ssl_s3_bucket
+  ignore_errors: true
+  register: apt_awscli
+
+# the next 2 sections will install the AWS CLI via pip in cases where the Ubuntu
+# package attempt above fails. This will happen on Travis CI, but not Ubuntu
+# 14.04 proper
+- name: install pip
+  become: true
+  become_method: sudo
+  apt: name=python-pip state=present
+  when: jenkins_master_nginx_ssl_s3_bucket and apt_awscli is defined and apt_awscli.failed
+  tags: [jenkins-master-nginx-ssl-s3]
+
+- name: install awscli via pip
+  become: true
+  become_method: sudo
+  pip: name=awscli state=present
+  when: jenkins_master_nginx_ssl_s3_bucket and apt_awscli is defined and apt_awscli.failed
+  tags: [jenkins-master-nginx-ssl-s3]
+
+- name: ensure SSL directory exists
+  become: true
+  become_method: sudo
+  file:
+    path: /etc/nginx/ssl
+    owner: root
+    group: root
+    mode: 0770
+    state: directory
+  when: jenkins_master_nginx_ssl_s3_bucket
+  tags: [jenkins-master-nginx-ssl-s3]
+
+# Ansible's S3 module requires too broad a permission set to properly/easily
+# restrict access to just a single file. Use the AWS CLI instead.
+- name: install SSL certificate from S3
+  become: true
+  become_method: sudo
+  command: aws s3 cp s3://{{ jenkins_master_nginx_ssl_s3_bucket }}/{{ jenkins_master_nginx_ssl_s3_crt }} {{ jenkins_master_nginx_ssl_crt}}
+  environment:
+        AWS_ACCESS_KEY_ID: "{{ jenkins_master_nginx_ssl_s3_access_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ jenkins_master_nginx_ssl_s3_secret_key }}"
+        AWS_DEFAULT_REGION: "{{ jenkins_master_nginx_ssl_s3_region }}"
+  notify:
+    - reload nginx
+  when: jenkins_master_nginx_ssl_s3_bucket
+  tags: [jenkins-master-nginx-ssl-s3]
+
+- name: install SSL key from S3
+  become: true
+  become_method: sudo
+  command: aws s3 cp s3://{{ jenkins_master_nginx_ssl_s3_bucket }}/{{ jenkins_master_nginx_ssl_s3_key }} {{ jenkins_master_nginx_ssl_key }}
+  environment:
+        AWS_ACCESS_KEY_ID: "{{ jenkins_master_nginx_ssl_s3_access_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ jenkins_master_nginx_ssl_s3_secret_key }}"
+        AWS_DEFAULT_REGION: "{{ jenkins_master_nginx_ssl_s3_region }}"
+  notify:
+    - reload nginx
+  when: jenkins_master_nginx_ssl_s3_bucket
+  tags: [jenkins-master-nginx-ssl-s3]
+
+- name: ensure SSL file permissions are correct
+  become: true
+  become_method: sudo
+  file:
+    path: "{{ item }}"
+    mode: 0660
+    owner: root
+    group: root
+    state: file
+  with_items:
+    - "{{ jenkins_master_nginx_ssl_crt }}"
+    - "{{ jenkins_master_nginx_ssl_key }}"
+  when: jenkins_master_nginx_ssl_s3_bucket
+  tags: [jenkins-master-nginx-ssl-s3]

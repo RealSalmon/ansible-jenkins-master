@@ -12,16 +12,55 @@ install:
 
 script:
 
+  # Basic role test
   - >
       ansible-playbook --connection local -i localhost, playbook.yml
       | grep -q '.*failed=0'
       || (echo 'Playbook failed' > /dev/stderr && exit 1)
 
+  # Idempotency test for basic role
   - >
       ansible-playbook --connection local -i localhost, playbook.yml
       | grep -q 'changed=0.*failed=0'
       || (echo 'Idempotency check failed' > /dev/stderr && exit 1)
 
+  # Test that Jenkins is running
   - >
       sudo /etc/init.d/jenkins status
-      || (echo 'Service status check failed' > /dev/stderr && exit 1)
+      || (echo 'Jenkins service status check failed' > /dev/stderr && exit 1)
+
+  # Test role for nginx and SSL
+  - >
+      ansible-playbook --connection local -i localhost, playbook-ssl.yml
+      | grep -q '.*failed=0'
+      || (echo 'Playbook failed' > /dev/stderr && exit 1)
+
+  # Test presence of SSL certificate
+  - >
+      sudo [ -f /etc/nginx/ssl/bogus.fogbutter.com.crt ]
+      || (echo 'SSL certificate not present' > /dev/stderr && exit 1)
+
+  # Test presence of SSL key
+  - >
+      sudo [ -f /etc/nginx/ssl/bogus.fogbutter.com.key ]
+      || (echo 'SSL key not present' > /dev/stderr && exit 1)
+
+  # Test that nginx configuration is available
+  - >
+      [ -f /etc/nginx/sites-available/jenkins-master.conf ]
+      || (echo 'nginx configuation not available' > /dev/stderr && exit 1)
+
+  # Test that nginx configuration is enabled
+  - >
+      [ -f /etc/nginx/sites-enabled/jenkins-master.conf ]
+      || (echo 'nginx configuation not enabled' > /dev/stderr && exit 1)
+
+  # Test that default nginx server configuration was removed
+  - >
+      [ ! -f /etc/nginx/sites-enabled/default ]
+      || (echo 'nginx default site not unlinked' > /dev/stderr && exit 1)
+
+  # Test that nginx is running
+  - >
+      sudo /etc/init.d/nginx status
+      || (echo 'nginx service status check failed' > /dev/stderr && exit 1)

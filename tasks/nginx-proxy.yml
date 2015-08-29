@@ -42,6 +42,10 @@
   when: jenkins_master_nginx_proxy and jenkins_master_nginx_unlink_default
   tags: [jenkins-master-nginx-proxy]
 
+- include: install-ssl-files-from-s3.yml
+  when: jenkins_master_nginx_ssl_s3_bucket and jenkins_master_nginx_ssl
+  tags: [jenkins-master-nginx-proxy, jenkins-master-nginx-ssl-s3]
+
 - name: ensure nginx service is enabled and running
   become: yes
   become_method: sudo

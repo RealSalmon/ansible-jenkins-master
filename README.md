@@ -24,14 +24,12 @@ Role Variables
 - jenkins_master_nginx_server_name: "_"
 - jenkins_master_nginx_enforce_ssl_xfp: false
 - jenkins_master_nginx_enforce_ssl: false
+- jenkins_master_nginx_log_dir: "/var/log/nginx"
+- jenkins_master_nginx_unlink_default: true
 - jenkins_master_nginx_ssl: false
 - jenkins_master_nginx_ssl_protocols: "TLSv1 TLSv1.1 TLSv1.2"
 - jenkins_master_nginx_ssl_crt: "/etc/nginx/ssl/{{ jenkins_master_nginx_server_name }}.crt"
 - jenkins_master_nginx_ssl_key: "/etc/nginx/ssl/{{ jenkins_master_nginx_server_name }}.key"
-- jenkins_master_nginx_log_dir: "/var/log/nginx"
-- jenkins_master_nginx_unlink_default: true
-
-# variables related to getting SSL key and certificate from AWS S3
 - jenkins_master_nginx_ssl_s3_bucket: false
 - jenkins_master_nginx_ssl_s3_crt: "jenkins-master.crt"
 - jenkins_master_nginx_ssl_s3_key: "jenkins-master.key"

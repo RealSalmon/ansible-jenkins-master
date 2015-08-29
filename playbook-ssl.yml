@@ -1,0 +1,13 @@
+---
+- hosts: all
+  vars:
+    jenkins_master_nginx_proxy: true
+    jenkins_master_nginx_unlink_default: true
+    jenkins_master_nginx_server_name: "bogus.fogbutter.com"
+    jenkins_master_nginx_ssl: true
+    jenkins_master_nginx_ssl_s3_bucket: "fogbutter-development-support"
+    jenkins_master_nginx_ssl_s3_crt: "self-signed-mock-ssl/bogus.fogbutter.com.crt"
+    jenkins_master_nginx_ssl_s3_key: "self-signed-mock-ssl/bogus.fogbutter.com.key"
+    jenkins_master_nginx_ssl_s3_access_key: "AKIAJ5UYLLMGIZTNZ5OQ"
+    jenkins_master_nginx_ssl_s3_secret_key: "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"
+  roles: [./]

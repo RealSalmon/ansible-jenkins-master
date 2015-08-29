@@ -72,11 +72,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.extra_vars = {
-      # jenkins_master_backup_file: "/vagrant/jenkins. . . .tar.gz",
-      jenkins_master_nginx_proxy: true,
-      jenkins_master_nginx_unlink_default: true
+
     }
-    ansible.playbook = "playbook.yml"
+    ansible.playbook = "playbook-ssl.yml"
   end
 
 end

@@ -48,7 +48,7 @@ Example Playbook
     ---
     - hosts: all
       roles:
-        - jenkins-master
+        - RealSalmon.jenkins-master
 
 License
 -------

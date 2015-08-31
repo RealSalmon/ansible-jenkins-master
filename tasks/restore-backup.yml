@@ -3,40 +3,40 @@
   become: yes
   become_method: sudo
   service: name=jenkins state=stopped
-  when: jenkins_master_backup_file
+  when: jenkins_master_backup_file != false
   tags: [jenkins-master-install, jenkins-master-restore]
 
 - name: delete existing backup directory
   become: yes
   become_method: sudo
   file: path=/var/lib/jenkins.bak state=absent
-  when: jenkins_master_backup_file
+  when: jenkins_master_backup_file != false
   tags: [jenkins-master-install, jenkins-master-restore]
 
 - name: backup existing jenkins directory
   become: yes
   become_method: sudo
   command: mv /var/lib/jenkins /var/lib/jenkins.bak removes=/var/lib/jenkins
-  when: jenkins_master_backup_file
+  when: jenkins_master_backup_file != false
   tags: [jenkins-master-install, jenkins-master-restore]
 
 - name: ensure jenkins directory exists
   become: yes
   become_method: sudo
   file: path=/var/lib/jenkins state=directory
-  when: jenkins_master_backup_file
+  when: jenkins_master_backup_file != false
   tags: [jenkins-master-install, jenkins-master-restore]
 
 - name: decompress backup file
   become: yes
   become_method: sudo
   unarchive: src={{ jenkins_master_backup_file }} dest={{ jenkins_master_backup_destination }} copy={{ jenkins_master_backup_file_copy }}
-  when: jenkins_master_backup_file
+  when: jenkins_master_backup_file != false
   tags: [jenkins-master-install, jenkins-master-restore]
 
 - name: set jenkins directory permissions
   become: yes
   become_method: sudo
   file: path=/var/lib/jenkins owner=jenkins group=jenkins recurse=yes state=directory
-  when: jenkins_master_backup_file
+  when: jenkins_master_backup_file != false
   tags: [jenkins-master-install, jenkins-master-restore]

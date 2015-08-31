@@ -18,7 +18,7 @@
   tags: [jenkins-master-install]
 
 - include: restore-backup.yml
-  when: jenkins_master_backup_file
+  when: jenkins_master_backup_file != false
   tags: [jenkins-master-restore]
 
 - name: ensure jenkins service is enabled and running

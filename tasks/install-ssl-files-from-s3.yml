@@ -35,7 +35,7 @@
 
 # Ansible's S3 module requires too broad a permission set to properly/easily
 # restrict access to just a single file. Use the AWS CLI instead.
-- name: install SSL certificate from S3
+- name: install SSL certificate from S3 (with creds)
   become: true
   become_method: sudo
   command: aws s3 cp s3://{{ jenkins_master_nginx_ssl_s3_bucket }}/{{ jenkins_master_nginx_ssl_s3_crt }} {{ jenkins_master_nginx_ssl_crt}}
@@ -45,10 +45,10 @@
         AWS_DEFAULT_REGION: "{{ jenkins_master_nginx_ssl_s3_region }}"
   notify:
     - reload nginx
-  when: jenkins_master_nginx_ssl_s3_bucket
+  when: jenkins_master_nginx_ssl_s3_bucket and jenkins_master_nginx_ssl_s3_access_key != ""
   tags: [jenkins-master-nginx-ssl-s3]
 
-- name: install SSL key from S3
+- name: install SSL key from S3 (with creds)
   become: true
   become_method: sudo
   command: aws s3 cp s3://{{ jenkins_master_nginx_ssl_s3_bucket }}/{{ jenkins_master_nginx_ssl_s3_key }} {{ jenkins_master_nginx_ssl_key }}
@@ -58,7 +58,25 @@
         AWS_DEFAULT_REGION: "{{ jenkins_master_nginx_ssl_s3_region }}"
   notify:
     - reload nginx
-  when: jenkins_master_nginx_ssl_s3_bucket
+  when: jenkins_master_nginx_ssl_s3_bucket and jenkins_master_nginx_ssl_s3_access_key != ""
+  tags: [jenkins-master-nginx-ssl-s3]
+
+- name: install SSL certificate from S3 (no creds)
+  become: true
+  become_method: sudo
+  command: aws s3 cp s3://{{ jenkins_master_nginx_ssl_s3_bucket }}/{{ jenkins_master_nginx_ssl_s3_crt }} {{ jenkins_master_nginx_ssl_crt}}
+  notify:
+    - reload nginx
+  when: jenkins_master_nginx_ssl_s3_bucket and jenkins_master_nginx_ssl_s3_access_key == ""
+  tags: [jenkins-master-nginx-ssl-s3]
+
+- name: install SSL key from S3 (no creds)
+  become: true
+  become_method: sudo
+  command: aws s3 cp s3://{{ jenkins_master_nginx_ssl_s3_bucket }}/{{ jenkins_master_nginx_ssl_s3_key }} {{ jenkins_master_nginx_ssl_key }}
+  notify:
+    - reload nginx
+  when: jenkins_master_nginx_ssl_s3_bucket and jenkins_master_nginx_ssl_s3_access_key == ""
   tags: [jenkins-master-nginx-ssl-s3]
 
 - name: ensure SSL file permissions are correct

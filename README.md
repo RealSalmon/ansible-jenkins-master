@@ -36,6 +36,7 @@ Role Variables
 - jenkins_master_nginx_ssl_s3_access_key: ""
 - jenkins_master_nginx_ssl_s3_secret_key: ""
 - jenkins_master_nginx_ssl_s3_region: "us-east-1"
+- jenkins_master_nginx_ssl_awscli_source: "pip"
 
 See defaults/main.yml for a description of role variables.
 

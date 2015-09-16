@@ -44,6 +44,7 @@ jenkins_master_nginx_log_dir: /var/log/nginx
 jenkins_master_nginx_unlink_default: false
 
 # SSL files from S3
+jenkins_master_nginx_ssl_awscli_source: pip
 jenkins_master_nginx_ssl_s3_bucket: false
 jenkins_master_nginx_ssl_s3_crt: "{{ jenkins_master_nginx_ssl_crt }}"
 jenkins_master_nginx_ssl_s3_key: "{{ jenkins_master_nginx_ssl_crt }}"

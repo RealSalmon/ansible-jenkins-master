@@ -1,28 +1,24 @@
 ---
-# this command fails on travis
 - name: install awscli via apt
   become: true
   become_method: sudo
   apt: name=awscli state=present
-  when: jenkins_master_nginx_ssl_s3_bucket
+  when: jenkins_master_nginx_ssl_s3_bucket and jenkins_master_nginx_ssl_awscli_source == "apt"
   ignore_errors: true
   register: apt_awscli
 
-# the next 2 sections will install the AWS CLI via pip in cases where the Ubuntu
-# package attempt above fails. This will happen on Travis CI, but not Ubuntu
-# 14.04 proper
 - name: install pip
   become: true
   become_method: sudo
   apt: name=python-pip state=present
-  when: jenkins_master_nginx_ssl_s3_bucket and apt_awscli is defined and apt_awscli.failed
+  when: jenkins_master_nginx_ssl_s3_bucket and jenkins_master_nginx_ssl_awscli_source == "pip"
   tags: [jenkins-master-nginx-ssl-s3]
 
 - name: install awscli via pip
   become: true
   become_method: sudo
   pip: name=awscli state=present
-  when: jenkins_master_nginx_ssl_s3_bucket and apt_awscli is defined and apt_awscli.failed
+  when: jenkins_master_nginx_ssl_s3_bucket and jenkins_master_nginx_ssl_awscli_source == "pip"
   tags: [jenkins-master-nginx-ssl-s3]
 
 - name: ensure SSL directory exists

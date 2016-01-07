@@ -27,6 +27,8 @@ script:
       sudo /etc/init.d/jenkins status
       || (echo 'Jenkins service status check failed' > /dev/stderr && exit 1)
 
+  - echo $AWS_ACCESS_KEY_ID
+  
   # Test role for nginx and SSL
   - >
       ansible-playbook --connection local -i localhost, playbook-ssl.yml

@@ -11,14 +11,17 @@
   apt_repository: repo="{{ jenkins_master_apt_repo }}" update_cache=yes
   tags: [jenkins-master-install]
 
-- name: install required packages
+- name: install jre
   become: yes
   become_method: sudo
-  apt: name={{ item }} state=present
+  apt: name=default-jre-headless state=present
   tags: [jenkins-master-install]
-  with_items:
-    - default-jre
-    - jenkins
+
+- name: install jenkins
+  become: yes
+  become_method: sudo
+  apt: name=jenkins state=present
+  tags: [jenkins-master-install]
 
 - include: restore-backup.yml
   when: jenkins_master_backup_file != false

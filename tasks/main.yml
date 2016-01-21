@@ -14,8 +14,11 @@
 - name: install required packages
   become: yes
   become_method: sudo
-  apt: name=jenkins state=present
+  apt: name={{ item }} state=present
   tags: [jenkins-master-install]
+  with_items:
+    - default-jre
+    - jenkins
 
 - include: restore-backup.yml
   when: jenkins_master_backup_file != false

@@ -30,7 +30,7 @@
     group: root
     mode: 0770
     state: directory
-  when: jenkins_master_nginx_ssl_s3_bucket
+  when: jenkins_master_nginx_ssl_s3_bucket and true
   tags: [jenkins-master-nginx-ssl-s3]
 
 # Ansible's S3 module requires too broad a permission set to properly/easily
@@ -91,5 +91,5 @@
   with_items:
     - "{{ jenkins_master_nginx_ssl_crt }}"
     - "{{ jenkins_master_nginx_ssl_key }}"
-  when: jenkins_master_nginx_ssl_s3_bucket
+  when: jenkins_master_nginx_ssl_s3_bucket and true
   tags: [jenkins-master-nginx-ssl-s3]
